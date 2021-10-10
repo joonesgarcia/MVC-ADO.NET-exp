@@ -1,0 +1,54 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace HospitalCentral.DAL.Models
+{
+    public class Address
+    {
+        [Key]
+        public Guid Id { get; set; }
+        [Required]
+        public string Cep { get; set; }
+        [Required]
+        public string State { get; set; }
+        [Required]
+        public string City { get; set; }
+        [Required]
+        public string Street { get; set; }
+        [Required]
+        public int HouseNumber { get; set; }
+        [Required] //dependency
+        public string PatientCpf { get; set; }
+
+        public Address(string cep, string state, string city, string street, int houseNumber, Patient patient)
+        {
+            Id = Guid.NewGuid();
+            Cep = cep;
+            State = state;
+            City = city;
+            Street = street;
+            HouseNumber = houseNumber;
+            PatientCpf = patient.Cpf;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is Address address &&
+                   Id.Equals(address.Id) &&
+                   Cep == address.Cep &&
+                   State == address.State &&
+                   City == address.City &&
+                   Street == address.Street &&
+                   HouseNumber == address.HouseNumber &&
+                   PatientCpf == address.PatientCpf;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Id, Cep, State, City, Street, HouseNumber, PatientCpf);
+        }
+    }
+}
