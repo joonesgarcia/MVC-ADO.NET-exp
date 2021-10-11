@@ -13,11 +13,12 @@ namespace DAL.DataAccess
         public static void InsertEmail(Email E)
         {
             MySqlConnection conn = IDAO.DAOConnect();
-            MySqlCommand cmd = new MySqlCommand("Insert", conn);
+            MySqlCommand cmdE = new MySqlCommand("INSERT INTO Patients(emailAddress, patientCpf) VALUES (@emailAddress, @patientCpf)", conn);
 
-            cmd.Parameters.AddWithValue("@PatientCpf", E.PatientCpf);
-            cmd.Parameters.AddWithValue("@EmailAddress", E.EmailAddress);
-           
+            cmdE.Parameters.AddWithValue("@patientCpf", E.PatientCpf);
+            cmdE.Parameters.AddWithValue("@emailAddress", E.EmailAddress);
+
+            cmdE.ExecuteNonQuery();
             conn.Close();
         }
     }

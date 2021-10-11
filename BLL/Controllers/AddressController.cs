@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BLL.Controllers
 {
-    class AdressController
+    class AddressController
     {
     }
 }

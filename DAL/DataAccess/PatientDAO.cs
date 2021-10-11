@@ -14,19 +14,21 @@ namespace DAL.DataAccess
         public static void InsertPatient(Patient patient)
         {
             MySqlConnection conn = IDAO.DAOConnect();
-            MySqlCommand cmd = new MySqlCommand("Insert", conn);
+            MySqlCommand cmdP = new MySqlCommand("INSERT INTO Patients(name, birth, cpf) VALUES (@name, @birth, @cpf)", conn);
 
-            cmd.Parameters.AddWithValue("@Name", patient.Name);
-            cmd.Parameters.AddWithValue("@Birth", patient.Birth);
-            cmd.Parameters.AddWithValue("@Cpf", patient.Cpf);
+            cmdP.Parameters.AddWithValue("@name", patient.Name);
+            cmdP.Parameters.AddWithValue("@birth", patient.Birth);
+            cmdP.Parameters.AddWithValue("@cpf", patient.Cpf);
+            
             foreach (Address A in patient.PAdresses)
             {
                 AddressDAO.InsertAdress(A);
             }
             foreach (Email E in patient.EmailAddresses)
             {
-                cmd.Parameters.AddWithValue("@email", E);
+                EmailDAO.InsertEmail(E);
             }
+            cmdP.ExecuteNonQuery();
             conn.Close();
         }
     }
