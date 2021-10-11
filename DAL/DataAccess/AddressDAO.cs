@@ -1,4 +1,4 @@
-﻿using HospitalCentral.Models;
+﻿using DAL.Models;
 using MySqlConnector;
 using System;
 using System.Collections.Generic;
@@ -24,6 +24,37 @@ namespace DAL.DataAccess
 
             cmdA.ExecuteNonQuery();
             conn.Close();
+        }
+        public static List<Address> findAll()
+        {
+            MySqlConnection conn = IDAO.DAOConnect();
+            MySqlCommand cmd = new MySqlCommand("SELECT * FROM addresses", conn);
+            List<Address> addresses = new List<Address>();
+
+            using(var header = cmd.ExecuteReader())
+            {               
+                while (header.Read())
+                {
+                    Address tempAddress = new Address();
+
+                    tempAddress.Id = Guid.Parse(header["id"].ToString());
+                    tempAddress.PatientId = Guid.Parse(header["patient_id"].ToString());
+                    tempAddress.Cep = header["cep"].ToString();                   
+                    tempAddress.State = header["state"].ToString();
+                    tempAddress.City = header["city"].ToString();
+                    tempAddress.Street = header["street"].ToString();
+                    tempAddress.HouseNumber = Int32.Parse(header["housenumber"].ToString());
+
+                    addresses.Add(tempAddress);
+                }
+            }
+            return addresses;
+        }
+        public static void DeleteAddress (Address A)
+        {
+            MySqlConnection conn = IDAO.DAOConnect();
+
+            MySqlCommand cmd = new MySqlCommand("DELETE FROM Addresses");
         }
     }
 }
