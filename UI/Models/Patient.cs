@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace HospitalCentral.DAL.Models
+namespace HospitalCentral.Models
 {
     public class Patient
     {
@@ -15,12 +15,12 @@ namespace HospitalCentral.DAL.Models
         [Required]
         public DateTime Birth { get; set; }
         [Required]
-        public string Cpf { get; set; }       
+        public string Cpf { get; set; }
+        [Required] 
+        public Email EmailAddress { get; set; }
         [Required] //dependency
         public List<Address> PAdresses { get; set; } = new List<Address>();
-        [Required] //dependency
-        public List<Email> EmailAddresses { get; set; } = new List<Email>();
-
+        
         public Patient(string name, DateTime birth, string cpf, Address pAdress, Email emailaddress)
         {
             Id = Guid.NewGuid();
@@ -28,7 +28,7 @@ namespace HospitalCentral.DAL.Models
             Birth = birth;
             Cpf = cpf;
             PAdresses.Add(pAdress);
-            EmailAddresses.Add(emailaddress);
+            EmailAddress = emailaddress;
         }
 
         public override bool Equals(object obj)
@@ -38,13 +38,13 @@ namespace HospitalCentral.DAL.Models
                    Name == patient.Name &&
                    Birth == patient.Birth &&
                    Cpf == patient.Cpf &&
-                   EqualityComparer<List<Address>>.Default.Equals(PAdresses, patient.PAdresses) &&
-                   EqualityComparer<List<Email>>.Default.Equals(EmailAddresses, patient.EmailAddresses);
+                   EqualityComparer<Email>.Default.Equals(EmailAddress, patient.EmailAddress) &&
+                   EqualityComparer<List<Address>>.Default.Equals(PAdresses, patient.PAdresses);
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Id, Name, Birth, Cpf, PAdresses, EmailAddresses);
+            return HashCode.Combine(Id, Name, Birth, Cpf, EmailAddress, PAdresses);
         }
     }
 }

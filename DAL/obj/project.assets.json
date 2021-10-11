@@ -73,6 +73,19 @@
         "runtime": {
           "bin/placeholder/BLL.dll": {}
         }
+      },
+      "UI/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v5.0",
+        "compile": {
+          "bin/placeholder/UI.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/UI.dll": {}
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
       }
     }
   },
@@ -173,12 +186,18 @@
       "type": "project",
       "path": "../BLL/BLL.csproj",
       "msbuildProject": "../BLL/BLL.csproj"
+    },
+    "UI/1.0.0": {
+      "type": "project",
+      "path": "../UI/UI.csproj",
+      "msbuildProject": "../UI/UI.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net5.0": [
       "BLL >= 1.0.0",
-      "MySqlConnector >= 1.3.13"
+      "MySqlConnector >= 1.3.13",
+      "UI >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -217,6 +236,9 @@
           "projectReferences": {
             "C:\\Users\\joaog\\source\\repos\\HospitalCentral.web\\BLL\\BLL.csproj": {
               "projectPath": "C:\\Users\\joaog\\source\\repos\\HospitalCentral.web\\BLL\\BLL.csproj"
+            },
+            "C:\\Users\\joaog\\source\\repos\\HospitalCentral.web\\UI\\UI.csproj": {
+              "projectPath": "C:\\Users\\joaog\\source\\repos\\HospitalCentral.web\\UI\\UI.csproj"
             }
           }
         }

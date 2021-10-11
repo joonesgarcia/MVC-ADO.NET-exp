@@ -1,4 +1,4 @@
-﻿using HospitalCentral.DAL.Models;
+﻿using HospitalCentral.Models;
 using MySqlConnector;
 using System;
 using System.Collections.Generic;
@@ -13,14 +13,14 @@ namespace DAL.DataAccess
         public static void InsertAdress (Address A)
         {
             MySqlConnection conn = IDAO.DAOConnect();
-            MySqlCommand cmdA = new MySqlCommand("INSERT INTO Addresses(cep, state, city, street, houseNumber, patientCpf) VALUES (@cep, @state, @city, @street, @houseNumber, @patientCpf)", conn);
-
-            cmdA.Parameters.AddWithValue("@patientCpf", A.PatientCpf);
+            MySqlCommand cmdA = new MySqlCommand("INSERT INTO Addresses(cep, state, city, street, houseNumber, patientid) VALUES (@cep, @state, @city, @street, @houseNumber, @patientid)", conn);
+      
             cmdA.Parameters.AddWithValue("@cep", A.Cep);
             cmdA.Parameters.AddWithValue("@state", A.State);
             cmdA.Parameters.AddWithValue("@city", A.City);
             cmdA.Parameters.AddWithValue("@street", A.Street);
             cmdA.Parameters.AddWithValue("@houseNumber", A.HouseNumber);
+            cmdA.Parameters.AddWithValue("@patientid", A.PatientId);
 
             cmdA.ExecuteNonQuery();
             conn.Close();

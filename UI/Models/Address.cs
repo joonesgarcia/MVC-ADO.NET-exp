@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace HospitalCentral.DAL.Models
+namespace HospitalCentral.Models
 {
     public class Address
     {
@@ -21,7 +21,7 @@ namespace HospitalCentral.DAL.Models
         [Required]
         public int HouseNumber { get; set; }
         [Required] //dependency
-        public string PatientCpf { get; set; }
+        public Guid PatientId { get; set; }
 
         public Address(string cep, string state, string city, string street, int houseNumber, Patient patient)
         {
@@ -31,7 +31,7 @@ namespace HospitalCentral.DAL.Models
             City = city;
             Street = street;
             HouseNumber = houseNumber;
-            PatientCpf = patient.Cpf;
+            PatientId = patient.Id;
         }
 
         public override bool Equals(object obj)
@@ -43,12 +43,12 @@ namespace HospitalCentral.DAL.Models
                    City == address.City &&
                    Street == address.Street &&
                    HouseNumber == address.HouseNumber &&
-                   PatientCpf == address.PatientCpf;
+                   PatientId.Equals(address.PatientId);
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Id, Cep, State, City, Street, HouseNumber, PatientCpf);
+            return HashCode.Combine(Id, Cep, State, City, Street, HouseNumber, PatientId);
         }
     }
 }

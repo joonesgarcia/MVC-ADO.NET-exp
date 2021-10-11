@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HospitalCentral.DAL.Models
+namespace HospitalCentral.Models
 {
     public class Email
     {
@@ -14,24 +14,26 @@ namespace HospitalCentral.DAL.Models
         [Required]
         public string EmailAddress { get; set; }
         [Required] //dependency
-        public string PatientCpf { get; set; }
+        public Guid PatientId { get; set; }
 
         public Email(string emailAddress, Patient patient)
         {
             Id = Guid.NewGuid();
             EmailAddress = emailAddress;
-            PatientCpf = patient.Cpf;
+            PatientId = patient.Id;
         }
+
         public override bool Equals(object obj)
         {
             return obj is Email email &&
                    Id.Equals(email.Id) &&
                    EmailAddress == email.EmailAddress &&
-                   PatientCpf == email.PatientCpf;
+                   PatientId.Equals(email.PatientId);
         }
+
         public override int GetHashCode()
         {
-            return HashCode.Combine(Id, EmailAddress, PatientCpf);
+            return HashCode.Combine(Id, EmailAddress, PatientId);
         }
     }
 }
