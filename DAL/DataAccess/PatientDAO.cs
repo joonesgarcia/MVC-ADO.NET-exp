@@ -1,5 +1,4 @@
 ﻿using HospitalCentral.DAL.Models;
-using Microsoft.Data.SqlClient;
 using MySqlConnector;
 using System;
 using System.Collections.Generic;
