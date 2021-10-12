@@ -1,10 +1,12 @@
 ﻿using DAL.DataAccess;
+using DAL.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 
 namespace BLL.Controllers
 {
@@ -13,6 +15,29 @@ namespace BLL.Controllers
         public IActionResult Index()
         {          
             return View(PatientDAO.FindAll());
+        }
+        public IActionResult Edit(Guid? id)
+        {
+            if (id == null) return NotFound();
+            Patient p = PatientDAO.FindById(id);
+            if (p == null) return NotFound();
+            return View(p);
+        }
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        public IActionResult Edit (Guid id, Patient p)
+        {
+            if (id != p.Id) return BadRequest();
+            try
+            {
+                PatientDAO.Update(id, p);
+                return RedirectToAction(nameof(Index));
+            }catch (Exception e)
+            {
+                return NotFound();
+            }
+            
+
         }
     }
 }

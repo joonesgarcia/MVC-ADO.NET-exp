@@ -25,7 +25,7 @@ namespace DAL.DataAccess
             cmdA.ExecuteNonQuery();
             conn.Close();
         }
-        public static List<Address> findAll()
+        public static List<Address> FindAll()
         {
             MySqlConnection conn = IDAO.DAOConnect();
             MySqlCommand cmd = new MySqlCommand("SELECT * FROM addresses", conn);

@@ -12,7 +12,7 @@ namespace BLL.Controllers
     {
         public IActionResult Index()
         {
-            return View(AddressDAO.findAll());
+            return View(AddressDAO.FindAll());
         }
     }
 }

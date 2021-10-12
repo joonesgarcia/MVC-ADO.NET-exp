@@ -2,6 +2,7 @@
 using MySqlConnector;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,8 +24,7 @@ namespace DAL.DataAccess
             foreach (Address A in patient.Adresses)
             {
                 AddressDAO.InsertAdress(A);
-            }
-            
+            }           
             cmdP.ExecuteNonQuery();
             conn.Close();
         }
@@ -49,7 +49,43 @@ namespace DAL.DataAccess
                     patients.Add(tempPatient);
                 } 
             }
+            conn.Close();
             return patients;
         }
+        public static Patient FindById(Guid? id)
+        {
+            MySqlConnection conn = IDAO.DAOConnect();
+            string sqlQuery = "SELECT name, birth, cpf, email FROM patients WHERE id = @id;";
+            MySqlCommand cmd = new MySqlCommand(sqlQuery, conn);
+            cmd.Parameters.AddWithValue("@id", id);
+            Patient tempPatient = new Patient();
+
+            using (var header = cmd.ExecuteReader()) { 
+                while (header.Read()) { 
+                        //tempPatient.Id = Guid.Parse(header["id"].ToString());
+                        tempPatient.Name = header["name"].ToString();
+                        tempPatient.Birth = DateTime.Parse(header["birth"].ToString());
+                        tempPatient.Cpf = header["cpf"].ToString();
+                        tempPatient.Email = header["email"].ToString();
+                }
+            }
+            conn.Close();
+            return tempPatient;
+        }
+        public static void Update(Guid? id, Patient p)
+        {
+            MySqlConnection conn = IDAO.DAOConnect();
+            string sqlQuery = "UPDATE patients SET name=@name, birth=@birth, cpf=@cpf, email=@email WHERE id = @id;";
+            MySqlCommand cmd = new MySqlCommand(sqlQuery, conn);
+            cmd.Parameters.AddWithValue("@id", id);
+            cmd.Parameters.AddWithValue("@name", p.Name);
+            cmd.Parameters.AddWithValue("@birth", p.Birth);
+            cmd.Parameters.AddWithValue("@cpf", p.Cpf);
+            cmd.Parameters.AddWithValue("@email", p.Email);
+
+            cmd.ExecuteNonQuery();
+            conn.Close();
+        }
+
     }
 }

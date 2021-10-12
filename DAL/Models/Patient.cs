@@ -14,6 +14,7 @@ namespace DAL.Models
         [Required]
         public string Name { get; set; }
         [Display(Name = "Nascimento")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         [Required]
         public DateTime Birth { get; set; }
         [Display(Name = "CPF")]
