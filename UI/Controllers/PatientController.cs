@@ -37,5 +37,38 @@ namespace BLL.Controllers
                 return NotFound();
             }           
         }
+        public IActionResult Delete(Guid? id)
+        {
+            if (id == null) return NotFound();
+            Patient p = PatientDAO.FindById(id);
+            if (p == null) return NotFound();
+            return View(p);
+        }
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        public IActionResult Delete(Guid id)
+        {
+            if (id != id) return BadRequest();
+            try
+            {
+                PatientDAO.Delete(id);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception e)
+            {
+                return NotFound();
+            }
+        }
+        public IActionResult Insert()
+        {
+            return View();
+        }
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        public IActionResult Insert(Patient p)
+        {
+            PatientDAO.Insert(p);
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

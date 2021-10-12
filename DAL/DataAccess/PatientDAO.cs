@@ -11,11 +11,14 @@ namespace DAL.DataAccess
 {
     public class PatientDAO : IDAO
     {
-        public static void InsertPatient(Patient patient)
+        public static void Insert(Patient patient)
         {
             MySqlConnection conn = IDAO.DAOConnect();
-            MySqlCommand cmdP = new MySqlCommand("INSERT INTO patients(name, birth, cpf, email) VALUES (@name, @birth, @cpf, @email)", conn);
+            MySqlCommand cmdP = new MySqlCommand("INSERT INTO patients(id,name, birth, cpf, email) VALUES (@id,@name, @birth, @cpf, @email)", conn);
 
+            patient.Id = Guid.NewGuid();
+
+            cmdP.Parameters.AddWithValue("@id", patient.Id);
             cmdP.Parameters.AddWithValue("@name", patient.Name);
             cmdP.Parameters.AddWithValue("@birth", patient.Birth);
             cmdP.Parameters.AddWithValue("@cpf", patient.Cpf);
@@ -82,6 +85,18 @@ namespace DAL.DataAccess
             cmd.Parameters.AddWithValue("@birth", p.Birth);
             cmd.Parameters.AddWithValue("@cpf", p.Cpf);
             cmd.Parameters.AddWithValue("@email", p.Email);
+
+            cmd.ExecuteNonQuery();
+            conn.Close();
+        }
+
+        public static void Delete(Guid id)
+        {
+            MySqlConnection conn = IDAO.DAOConnect();
+            string sqlQuery = "DELETE FROM patients WHERE id = @id;"; // ###################
+            MySqlCommand cmd = new MySqlCommand(sqlQuery, conn);
+
+            cmd.Parameters.AddWithValue("@id", id);
 
             cmd.ExecuteNonQuery();
             conn.Close();

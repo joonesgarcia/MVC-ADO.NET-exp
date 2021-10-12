@@ -14,7 +14,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Cep" class="control-label"></label>
-                <input asp-for="Cep" class="form-control" />
+                <input asp-for="Cep" class="form-control"/>
                 <span asp-validation-for="Cep" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -49,5 +49,25 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");
+     <script type="text/javascript">
+         $("#Cep").keyup(function (event) {
+
+             const cep = $(event.target).val();
+
+             if (cep.length == 9) {
+                $.ajax({
+                    url: `https://viacep.com.br/ws/${cep}/json`,
+                }).done(function (data) {
+                    console.log(data);
+                    $("#State").val(data.uf);
+                    $("#City").val(data.localidade);
+                    $("#Street").val(data.logradouro);
+                });
+             }
+         });
+
+     </script>   
+        
+   }
 }

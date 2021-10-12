@@ -11,8 +11,7 @@ namespace DAL.DataAccess
     {
         public static MySqlConnection DAOConnect()
         {
-            string connStr = "server=localhost;user=root;database=clinica_medica";
-            MySqlConnection conn = new MySqlConnection(connStr);
+            MySqlConnection conn = new MySqlConnection(Environment.GetEnvironmentVariable("STRING_CONEXAO_BD"));
             try
             {
                 Console.WriteLine("Connecting to MySQL...");

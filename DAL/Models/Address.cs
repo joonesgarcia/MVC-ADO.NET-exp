@@ -12,6 +12,7 @@ namespace DAL.Models
         public Guid Id { get; set; }
         [Display(Name = "CEP")]
         [Required]
+        [MaxLength(9)]
         public string Cep { get; set; }
         [Display(Name = "Estado")]
         [Required]
@@ -24,6 +25,7 @@ namespace DAL.Models
         public string Street { get; set; }
         [Display(Name = "Número")]
         [Required]
+        [MaxLength(5)]
         public int HouseNumber { get; set; }
         [Required] //dependency
         public Guid PatientId { get; set; }

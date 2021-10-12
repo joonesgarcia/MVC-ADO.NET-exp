@@ -27,8 +27,7 @@ namespace DAL.Models
         public List<Address> Adresses { get; set; } = new List<Address>();
         
         public Patient(string name, DateTime birth, string cpf, Address pAdress, string email)
-        {
-            Id = Guid.NewGuid();
+        {            
             Name = name;
             Birth = birth;
             Cpf = cpf;
