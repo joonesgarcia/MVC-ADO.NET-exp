@@ -120,3 +120,4 @@ C:\Users\joaog\source\repos\HospitalCentral.web\UI\obj\Debug\net5.0\UI.genruntim
 C:\Users\joaog\source\repos\HospitalCentral.web\UI\obj\Debug\net5.0\Razor\Views\Patient\Index.cshtml.g.cs
 C:\Users\joaog\source\repos\HospitalCentral.web\UI\obj\Debug\net5.0\Razor\Views\Address\Index.cshtml.g.cs
 C:\Users\joaog\source\repos\HospitalCentral.web\UI\obj\Debug\net5.0\Razor\Views\Patient\Edit.cshtml.g.cs
+C:\Users\joaog\source\repos\HospitalCentral.web\UI\obj\Debug\net5.0\Razor\Views\Address\Edit.cshtml.g.cs

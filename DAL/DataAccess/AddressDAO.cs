@@ -50,11 +50,45 @@ namespace DAL.DataAccess
             }
             return addresses;
         }
-        public static void DeleteAddress (Address A)
+        public static Address FindById(Guid? id)
         {
             MySqlConnection conn = IDAO.DAOConnect();
+            //string sqlQuery = "SELECT name, cep, state, city, street, houseNumber FROM addresses JOIN patients WHERE patient_id=@id AND patients.id=patient_id;";
+            string sqlQuery = "SELECT id, cep, state, city, street, houseNumber FROM addresses WHERE id=@id;";
+            MySqlCommand cmd = new MySqlCommand(sqlQuery, conn);
+            cmd.Parameters.AddWithValue("@id", id);
+            Address tempAddress = new Address();
 
-            MySqlCommand cmd = new MySqlCommand("DELETE FROM Addresses");
+            using (var header = cmd.ExecuteReader())
+            {
+                while (header.Read())
+                {
+                    tempAddress.Id = Guid.Parse(header["id"].ToString()); // 
+                    tempAddress.Cep = header["cep"].ToString();
+                    tempAddress.State = header["state"].ToString();
+                    tempAddress.City = header["city"].ToString();
+                    tempAddress.Street = header["street"].ToString();
+                    tempAddress.HouseNumber = Int32.Parse(header["houseNumber"].ToString());
+                }
+            }
+            conn.Close();
+            return tempAddress;
         }
+        public static void Update(Guid? id, Address p)
+        {
+            MySqlConnection conn = IDAO.DAOConnect(); 
+            string sqlQuery = "UPDATE addresses SET cep=@cep, state=@state, city=@city, street=@street, houseNumber= @houseNumber WHERE id = @id;";
+            MySqlCommand cmd = new MySqlCommand(sqlQuery, conn);
+            cmd.Parameters.AddWithValue("@id", id);
+            cmd.Parameters.AddWithValue("@cep", p.Cep);
+            cmd.Parameters.AddWithValue("@state", p.State);
+            cmd.Parameters.AddWithValue("@city", p.City);
+            cmd.Parameters.AddWithValue("@street", p.Street);
+            cmd.Parameters.AddWithValue("@houseNumber", p.HouseNumber);
+
+            cmd.ExecuteNonQuery();
+            conn.Close();
+        }
+
     }
 }

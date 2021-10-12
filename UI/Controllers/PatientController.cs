@@ -35,9 +35,7 @@ namespace BLL.Controllers
             }catch (Exception e)
             {
                 return NotFound();
-            }
-            
-
+            }           
         }
     }
 }

@@ -55,14 +55,14 @@ namespace DAL.DataAccess
         public static Patient FindById(Guid? id)
         {
             MySqlConnection conn = IDAO.DAOConnect();
-            string sqlQuery = "SELECT name, birth, cpf, email FROM patients WHERE id = @id;";
+            string sqlQuery = "SELECT id, name, birth, cpf, email FROM patients WHERE id = @id;";
             MySqlCommand cmd = new MySqlCommand(sqlQuery, conn);
             cmd.Parameters.AddWithValue("@id", id);
             Patient tempPatient = new Patient();
 
             using (var header = cmd.ExecuteReader()) { 
                 while (header.Read()) { 
-                        //tempPatient.Id = Guid.Parse(header["id"].ToString());
+                        tempPatient.Id = Guid.Parse(header["id"].ToString());
                         tempPatient.Name = header["name"].ToString();
                         tempPatient.Birth = DateTime.Parse(header["birth"].ToString());
                         tempPatient.Cpf = header["cpf"].ToString();
