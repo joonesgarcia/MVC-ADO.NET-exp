@@ -24,13 +24,6 @@ namespace UI.Controllers
 
         public IActionResult Index()
         {
-            _emailService.SendEmail(new UserEmailOptions()
-            {
-                Body = "Olá Fellipe Augusto Oliveira Santos Lopes",
-                Subject = "Hospital centra app",
-                ToEmails = new List<string>() { "faosl@hotmail.com"}
-            });
-
             return View();
         }
 
