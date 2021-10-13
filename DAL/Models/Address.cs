@@ -25,7 +25,6 @@ namespace DAL.Models
         public string Street { get; set; }
         [Display(Name = "Número")]
         [Required]
-        [MaxLength(5)]
         public int HouseNumber { get; set; }
         [Required] //dependency
         public Guid PatientId { get; set; }

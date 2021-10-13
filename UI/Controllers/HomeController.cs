@@ -6,20 +6,31 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using UI.Models;
+using UI.Services;
 
 namespace UI.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly EmailService _emailService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger,
+            EmailService emailService)
         {
             _logger = logger;
+            _emailService = emailService;
         }
 
         public IActionResult Index()
         {
+            _emailService.SendEmail(new UserEmailOptions()
+            {
+                Body = "Olá Fellipe Augusto Oliveira Santos Lopes",
+                Subject = "Hospital centra app",
+                ToEmails = new List<string>() { "faosl@hotmail.com"}
+            });
+
             return View();
         }
 

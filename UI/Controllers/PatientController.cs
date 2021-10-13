@@ -20,6 +20,34 @@ namespace BLL.Controllers
         {
             if (id == null) return NotFound();
             Patient p = PatientDAO.FindById(id);
+
+            p.Adresses.Add(new Address()
+            {
+                Cep = "02864-070",
+                City = "São Paulo",
+                HouseNumber = 199,
+                State = "SP",
+                Street = "Rua Reverendo"
+            });
+
+            p.Adresses.Add(new Address()
+            {
+                Cep = "16480-000",
+                City = "Guaimbê",
+                HouseNumber = 75,
+                State = "SP",
+                Street = "Rua alguma"
+            });
+
+            p.Adresses.Add(new Address()
+            {
+                Cep = "17533-463",
+                City = "Maríia",
+                HouseNumber = 153,
+                State = "SP",
+                Street = "Rua Laura da Purificação"
+            });
+
             if (p == null) return NotFound();
             return View(p);
         }
@@ -69,6 +97,13 @@ namespace BLL.Controllers
         {
             PatientDAO.Insert(p);
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public IActionResult AddAddress(Patient patient)
+        {
+            patient.Adresses.Add(new Address());
+            return PartialView("_Address", patient);
         }
     }
 }

@@ -58,15 +58,13 @@
              if (cep.length == 9) {
                 $.ajax({
                     url: `https://viacep.com.br/ws/${cep}/json`,
-                }).done(function (data) {
-                    console.log(data);
+                }).done(function (data){
                     $("#State").val(data.uf);
                     $("#City").val(data.localidade);
                     $("#Street").val(data.logradouro);
                 });
              }
          });
-
      </script>   
         
    }
