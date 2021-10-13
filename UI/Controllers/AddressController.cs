@@ -37,5 +37,27 @@ namespace BLL.Controllers
                 return NotFound();
             }
         }
+        public IActionResult Delete(Guid? id)
+        {
+            if (id == null) return NotFound();
+            Address a = AddressDAO.FindById(id);
+            if (a == null) return NotFound();
+            return View(a);
+        }
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        public IActionResult Delete(Address p)
+        {
+            if (p.Id != p.Id) return BadRequest();
+            try
+            {
+                AddressDAO.Delete(p);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception e)
+            {
+                return NotFound();
+            }
+        }
     }
 }

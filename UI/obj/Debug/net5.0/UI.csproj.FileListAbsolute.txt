@@ -250,3 +250,6 @@ C:\Users\faosl\Source\Repos\MVC-ADO.NET-exp\UI\obj\Debug\net5.0\ref\UI.dll
 C:\Users\faosl\Source\Repos\MVC-ADO.NET-exp\UI\obj\Debug\net5.0\UI.pdb
 C:\Users\faosl\Source\Repos\MVC-ADO.NET-exp\UI\obj\Debug\net5.0\UI.genruntimeconfig.cache
 C:\Users\faosl\Source\Repos\MVC-ADO.NET-exp\UI\obj\Debug\net5.0\Razor\Views\Patient\_Address.cshtml.g.cs
+C:\Users\joaog\source\repos\HospitalCentral.web\UI\bin\Debug\net5.0\libman.json
+C:\Users\joaog\source\repos\HospitalCentral.web\UI\obj\Debug\net5.0\Razor\Views\Patient\_Address.cshtml.g.cs
+C:\Users\joaog\source\repos\HospitalCentral.web\UI\obj\Debug\net5.0\Razor\Views\Address\Delete.cshtml.g.cs

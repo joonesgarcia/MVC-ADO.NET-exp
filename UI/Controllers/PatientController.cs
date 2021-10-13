@@ -6,12 +6,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using UI.Models;
+using UI.Services;
 
 namespace BLL.Controllers
 {
     public class PatientController : Controller
     {
+        private readonly EmailService _emailService;
+        public PatientController(EmailService emailservice)
+        {
+            _emailService = emailservice;
+        }
+
         public IActionResult Index()
         {          
             return View(PatientDAO.FindAll());
@@ -21,32 +28,7 @@ namespace BLL.Controllers
             if (id == null) return NotFound();
             Patient p = PatientDAO.FindById(id);
 
-            p.Adresses.Add(new Address()
-            {
-                Cep = "02864-070",
-                City = "São Paulo",
-                HouseNumber = 199,
-                State = "SP",
-                Street = "Rua Reverendo"
-            });
-
-            p.Adresses.Add(new Address()
-            {
-                Cep = "16480-000",
-                City = "Guaimbê",
-                HouseNumber = 75,
-                State = "SP",
-                Street = "Rua alguma"
-            });
-
-            p.Adresses.Add(new Address()
-            {
-                Cep = "17533-463",
-                City = "Maríia",
-                HouseNumber = 153,
-                State = "SP",
-                Street = "Rua Laura da Purificação"
-            });
+            p.Adresses.Add(new Address());
 
             if (p == null) return NotFound();
             return View(p);
@@ -76,7 +58,6 @@ namespace BLL.Controllers
         [AutoValidateAntiforgeryToken]
         public IActionResult Delete(Guid id)
         {
-            if (id != id) return BadRequest();
             try
             {
                 PatientDAO.Delete(id);
@@ -96,6 +77,12 @@ namespace BLL.Controllers
         public IActionResult Insert(Patient p)
         {
             PatientDAO.Insert(p);
+            _emailService.SendEmail(new UserEmailOptions()
+            {
+                Body = $"Olá {p.Name}, seu cadastro no sistema Hospital Central foi confirmado! ",
+                Subject = "Seja bem vindo ao Hospital Central",
+                ToEmails = new List<string>() { p.Email }
+            });
             return RedirectToAction(nameof(Index));
         }
 
