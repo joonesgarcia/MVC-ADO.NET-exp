@@ -90,5 +90,16 @@ namespace DAL.DataAccess
             conn.Close();
         }
 
+        public static void Delete(Address a)
+        {
+            MySqlConnection conn = IDAO.DAOConnect();
+            string sqlQuery = "DELETE FROM addresses WHERE id = @id;";
+            MySqlCommand cmd = new MySqlCommand(sqlQuery, conn);
+            cmd.Parameters.AddWithValue("@id", a.Id);
+
+            cmd.ExecuteNonQuery();
+            conn.Close();
+        }
+
     }
 }

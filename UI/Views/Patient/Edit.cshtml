@@ -8,41 +8,129 @@
 
 <h4>Patient</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <input type="hidden" asp-for="Id" />
+
+<form asp-action="Edit">
+
+    <input type="hidden" asp-for="Id" />
+    <div class="row">
+        <div class="col-8">
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
+        </div>
+        <div class="col-4">
             <div class="form-group">
                 <label asp-for="Birth" class="control-label"></label>
                 <input asp-for="Birth" class="form-control" />
                 <span asp-validation-for="Birth" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Cpf" class="control-label"></label>
-                <input asp-for="Cpf" class="form-control" disabled />
-                <span asp-validation-for="Cpf" class="text-danger"></span>
-            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-8">
             <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>
                 <input asp-for="Email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
+        </div>
+        <div class="col-4">
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <label asp-for="Cpf" class="control-label"></label>
+                <input asp-for="Cpf" class="form-control" disabled />
+                <span asp-validation-for="Cpf" class="text-danger"></span>
             </div>
-        </form>
+        </div>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    <div id="addresses">
+        <partial name="_Address" model="@Model" />
+    </div>
+    <div class="row">
+        <div class="col text-center">
+            <a asp-action="Index">Back to List</a>
+            <input type="submit" value="Save" class="btn btn-primary" />
+        </div>
+
+    </div>
+</form>
 
 @section Scripts {
+
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+
+    $(function () {
+        $('a.remove-row').click(removeAddress);
+
+        $(".cep").keyup(function (event) {
+            const $target = $(event.target);
+            const cep = $target.val();
+            const index = $target.data('index');
+
+            if (cep.length == 9) {
+                $.ajax({
+                    url: `https://viacep.com.br/ws/${cep}/json`,
+                }).done(function (data) {
+                    $(`#Adresses_${index}__State`).val(data.uf);
+                    $(`#Adresses_${index}__City`).val(data.localidade);
+                    $(`#Adresses_${index}__Street`).val(data.logradouro);
+                });
+            }
+        });
+
+        $("#addRow").click(function (e) {
+            e.preventDefault();
+
+            $.ajax({
+                url: `@Url.Action("AddAddress")`,
+                data: $("#addresses input").serialize(),
+                method: 'post',
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8'
+            }).done(function (html) {
+                $("#addresses").html(html);
+
+                $('a.remove-row').click(removeAddress);
+
+                refreshValidator();
+            });
+        });
+
+        function removeAddress(e) {
+            e.preventDefault();
+
+            const index = $(e.target).data('index');
+
+            replaceDataByNextFromCurrentIndex(index);
+
+            removeLastRow();
+
+        }
+
+        function replaceDataByNextFromCurrentIndex(index) {
+            for (var i = index; i < $('#addresses .itemRow').length - 1; i++) {
+                $(`#Adresses_${i}__Cep`).val($(`#Adresses_${i + 1}__Cep`).val());
+                $(`#Adresses_${i}__State`).val($(`#Adresses_${i + 1}__State`).val());
+                $(`#Adresses_${i}__City`).val($(`#Adresses_${i + 1}__City`).val());
+                $(`#Adresses_${i}__Street`).val($(`#Adresses_${i + 1}__Street`).val());
+                $(`#Adresses_${i}__HouseNumber`).val($(`#Adresses_${i + 1}__HouseNumber`).val());
+            }
+        }
+
+        function removeLastRow() {
+            $(`#item-row-${$('#addresses .itemRow').length - 1}`).remove();
+        }
+
+        function refreshValidator() {
+            $("form").removeData("validator").removeData("unobtrusiveValidation");
+
+            $.validator.unobtrusive.parse("form");
+        }
+
+
+    });
+    </script>
 }
