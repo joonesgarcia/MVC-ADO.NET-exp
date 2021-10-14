@@ -40,15 +40,6 @@ CREATE TABLE `addresses` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `addresses`
---
-
-LOCK TABLES `addresses` WRITE;
-/*!40000 ALTER TABLE `addresses` DISABLE KEYS */;
-/*!40000 ALTER TABLE `addresses` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `patients`
 --
 
@@ -67,20 +58,6 @@ CREATE TABLE `patients` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `patients`
---
-
-LOCK TABLES `patients` WRITE;
-/*!40000 ALTER TABLE `patients` DISABLE KEYS */;
-INSERT INTO `patients` VALUES ('4328543d-f369-463e-81ee-2938146fba3f','Anielle Wesla M X','2021-10-06','123456789','anielle.wesla@gmail.com');
-/*!40000 ALTER TABLE `patients` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Dumping events for database 'clinica_medica'
---
-
---
 -- Dumping routines for database 'clinica_medica'
 --
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -93,4 +70,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-10-14 16:59:14
+-- Dump completed on 2021-10-14 20:41:24
