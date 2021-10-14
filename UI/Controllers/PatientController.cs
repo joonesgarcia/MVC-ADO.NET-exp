@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using UI.Models;
 using UI.Services;
@@ -26,12 +27,13 @@ namespace BLL.Controllers
         public IActionResult Edit(Guid? id)
         {
             if (id == null) return NotFound();
+
             Patient p = PatientDAO.FindById(id);
 
-            p.Adresses.Add(new Address());
-
             if (p == null) return NotFound();
-            return View(p);
+        
+
+            return View("Form",p);
         }
         [HttpPost]
         [AutoValidateAntiforgeryToken]
@@ -70,7 +72,11 @@ namespace BLL.Controllers
         }
         public IActionResult Insert()
         {
-            return View();
+            var patient = new Patient();
+
+            patient.Adresses.Add(new Address());
+
+            return View("Form",patient);
         }
         [HttpPost]
         [AutoValidateAntiforgeryToken]

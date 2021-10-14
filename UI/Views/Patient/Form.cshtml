@@ -2,15 +2,18 @@
 
 @{
     ViewData["Title"] = "Edit";
+
+    var editing = Model.Id != Guid.Empty;
+
 }
 
-<h1>Edit</h1>
+<h1> @(editing ? "Edit" : "Insert")</h1>
 
 <h4>Patient</h4>
 <hr />
 
-<form asp-action="Edit">
-
+<form asp-action="@(editing ? "Edit" : "Insert")">
+    
     <input type="hidden" asp-for="Id" />
     <div class="row">
         <div class="col-8">
@@ -39,7 +42,14 @@
         <div class="col-4">
             <div class="form-group">
                 <label asp-for="Cpf" class="control-label"></label>
-                <input asp-for="Cpf" class="form-control" disabled />
+                @if (editing)
+                {
+                    <input asp-for="Cpf" class="form-control" readonly />
+                }
+                else
+                {
+                    <input asp-for="Cpf" class="form-control" />
+                }
                 <span asp-validation-for="Cpf" class="text-danger"></span>
             </div>
         </div>
@@ -51,9 +61,10 @@
     <div class="row">
         <div class="col text-center">
             <a asp-action="Index">Back to List</a>
-            <input type="submit" value="Save" class="btn btn-primary" />
-        </div>
-
+            <button type="submit" value="Save" class="btn btn-primary" id="save">
+                Save
+            </button>
+        </div>        
     </div>
 </form>
 
@@ -61,26 +72,19 @@
 
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
-    <script type="text/javascript">
+<script type="text/javascript">
 
     $(function () {
-        $('a.remove-row').click(removeAddress);
-
-        $(".cep").keyup(function (event) {
-            const $target = $(event.target);
-            const cep = $target.val();
-            const index = $target.data('index');
-
-            if (cep.length == 9) {
-                $.ajax({
-                    url: `https://viacep.com.br/ws/${cep}/json`,
-                }).done(function (data) {
-                    $(`#Adresses_${index}__State`).val(data.uf);
-                    $(`#Adresses_${index}__City`).val(data.localidade);
-                    $(`#Adresses_${index}__Street`).val(data.logradouro);
-                });
-            }
+        $('form').submit(function (e) {            
+            var $btn = $('#save');
+            $btn.prop('disabled', true);
+            $btn.html(
+                '<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>Salving...'
+            );
         });
+
+        $('a.remove-row').click(removeAddress);
+        configurekeyUpCep();
 
         $("#addRow").click(function (e) {
             e.preventDefault();
@@ -94,6 +98,8 @@
                 $("#addresses").html(html);
 
                 $('a.remove-row').click(removeAddress);
+
+                configurekeyUpCep();
 
                 refreshValidator();
             });
@@ -130,7 +136,27 @@
             $.validator.unobtrusive.parse("form");
         }
 
+        function configurekeyUpCep() {
+            $(".cep").each(function () {
+                const $this = $(this);
+                $this.keyup(function (event) {
+                    const $target = $(event.target);
+                    const cep = $target.val();
+                    const index = $target.data('index');
+
+                    if (cep.length == 9) {
+                        $.ajax({
+                            url: `https://viacep.com.br/ws/${cep}/json`,
+                        }).done(function (data) {
+                            $(`#Adresses_${index}__State`).val(data.uf);
+                            $(`#Adresses_${index}__City`).val(data.localidade);
+                            $(`#Adresses_${index}__Street`).val(data.logradouro);
+                        });
+                    }
+                });
+            });
+        }
 
     });
-    </script>
+</script>
 }

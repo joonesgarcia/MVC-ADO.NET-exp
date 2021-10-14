@@ -23,13 +23,16 @@ namespace DAL.DataAccess
             cmdP.Parameters.AddWithValue("@birth", patient.Birth);
             cmdP.Parameters.AddWithValue("@cpf", patient.Cpf);
             cmdP.Parameters.AddWithValue("@email", patient.Email);
-
-            foreach (Address A in patient.Adresses)
-            {
-                AddressDAO.InsertAdress(A);
-            }           
+                     
             cmdP.ExecuteNonQuery();
             conn.Close();
+
+            foreach (Address address in patient.Adresses)
+            {
+                address.Id = Guid.NewGuid();
+                address.PatientId = patient.Id;
+                AddressDAO.InsertAdress(address);
+            }
         }
         public static List<Patient> FindAll()
         {
@@ -73,6 +76,19 @@ namespace DAL.DataAccess
                 }
             }
             conn.Close();
+
+
+            List<Address> addresses = AddressDAO.FindByPatientId(id.Value);
+
+            if (addresses.Any())
+            {
+                tempPatient.Adresses = addresses;
+            }
+            else
+            {
+                tempPatient.Adresses.Add(new Address());
+            }
+
             return tempPatient;
         }
         public static void Update(Guid? id, Patient p)
@@ -88,6 +104,30 @@ namespace DAL.DataAccess
 
             cmd.ExecuteNonQuery();
             conn.Close();
+
+
+            foreach (Address address in p.Adresses.Where(a => a.Id == Guid.Empty))
+            {
+                address.Id = Guid.NewGuid();
+                address.PatientId = p.Id;
+                AddressDAO.InsertAdress(address);
+            }
+
+            foreach (Address address in p.Adresses.Where(a => a.Id != Guid.Empty))
+            {
+                AddressDAO.Update(address.Id,address);
+            }
+
+            var savedAddresses = AddressDAO.FindByPatientId(p.Id);
+
+            foreach (var savedAddress in savedAddresses)
+            {
+                if (!p.Adresses.Any(a => a.Id == savedAddress.Id))
+                {
+                    AddressDAO.Delete(savedAddress);
+                }
+            }
+
         }
 
         public static void Delete(Guid id)

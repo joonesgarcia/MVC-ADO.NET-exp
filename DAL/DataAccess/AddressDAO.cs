@@ -13,8 +13,9 @@ namespace DAL.DataAccess
         public static void InsertAdress (Address A)
         {
             MySqlConnection conn = IDAO.DAOConnect();
-            MySqlCommand cmdA = new MySqlCommand("INSERT INTO Addresses(cep, state, city, street, houseNumber, patientid) VALUES (@cep, @state, @city, @street, @houseNumber, @patientid)", conn);
-      
+            MySqlCommand cmdA = new MySqlCommand("INSERT INTO addresses(id,cep, state, city, street, houseNumber, patientid) VALUES (@id,@cep, @state, @city, @street, @houseNumber, @patientid)", conn);
+
+            cmdA.Parameters.AddWithValue("@id", A.Id);
             cmdA.Parameters.AddWithValue("@cep", A.Cep);
             cmdA.Parameters.AddWithValue("@state", A.State);
             cmdA.Parameters.AddWithValue("@city", A.City);
@@ -35,17 +36,7 @@ namespace DAL.DataAccess
             {               
                 while (header.Read())
                 {
-                    Address tempAddress = new Address();
-
-                    tempAddress.Id = Guid.Parse(header["id"].ToString());
-                    tempAddress.PatientId = Guid.Parse(header["patient_id"].ToString());
-                    tempAddress.Cep = header["cep"].ToString();                   
-                    tempAddress.State = header["state"].ToString();
-                    tempAddress.City = header["city"].ToString();
-                    tempAddress.Street = header["street"].ToString();
-                    tempAddress.HouseNumber = Int32.Parse(header["housenumber"].ToString());
-
-                    addresses.Add(tempAddress);
+                    addresses.Add(MapperFromDataReader(header));
                 }
             }
             return addresses;
@@ -63,16 +54,29 @@ namespace DAL.DataAccess
             {
                 while (header.Read())
                 {
-                    tempAddress.Id = Guid.Parse(header["id"].ToString()); // 
-                    tempAddress.Cep = header["cep"].ToString();
-                    tempAddress.State = header["state"].ToString();
-                    tempAddress.City = header["city"].ToString();
-                    tempAddress.Street = header["street"].ToString();
-                    tempAddress.HouseNumber = Int32.Parse(header["houseNumber"].ToString());
+                    tempAddress = MapperFromDataReader(header);
                 }
             }
             conn.Close();
             return tempAddress;
+        }
+        public static List<Address> FindByPatientId(Guid patientId)
+        {
+            MySqlConnection conn = IDAO.DAOConnect();            
+            string sqlQuery = "SELECT id, cep, state, city, street, houseNumber,patientid FROM addresses WHERE patientid=@patientid;";
+            MySqlCommand cmd = new MySqlCommand(sqlQuery, conn);
+            cmd.Parameters.AddWithValue("@patientid", patientId);
+            List<Address> tempAddresses = new List<Address>();
+
+            using (var header = cmd.ExecuteReader())
+            {
+                while (header.Read())
+                {
+                    tempAddresses.Add(MapperFromDataReader(header));
+                }
+            }
+            conn.Close();
+            return tempAddresses;
         }
         public static void Update(Guid? id, Address p)
         {
@@ -101,5 +105,19 @@ namespace DAL.DataAccess
             conn.Close();
         }
 
+        private static Address MapperFromDataReader(MySqlDataReader header)
+        {
+            Address tempAddress = new Address();
+
+            tempAddress.Id = Guid.Parse(header["id"].ToString()); // 
+            tempAddress.Cep = header["cep"].ToString();
+            tempAddress.State = header["state"].ToString();
+            tempAddress.City = header["city"].ToString();
+            tempAddress.Street = header["street"].ToString();
+            tempAddress.HouseNumber = Int32.Parse(header["houseNumber"].ToString());
+            tempAddress.PatientId = Guid.Parse(header["patientid"].ToString());
+
+            return tempAddress;
+        }
     }
 }
