@@ -45,7 +45,7 @@ namespace DAL.DataAccess
         {
             MySqlConnection conn = IDAO.DAOConnect();
             //string sqlQuery = "SELECT name, cep, state, city, street, houseNumber FROM addresses JOIN patients WHERE patient_id=@id AND patients.id=patient_id;";
-            string sqlQuery = "SELECT id, cep, state, city, street, houseNumber FROM addresses WHERE id=@id;";
+            string sqlQuery = "SELECT id, cep, state, city, street, houseNumber,patientid FROM addresses WHERE id=@id;";
             MySqlCommand cmd = new MySqlCommand(sqlQuery, conn);
             cmd.Parameters.AddWithValue("@id", id);
             Address tempAddress = new Address();

@@ -56,6 +56,7 @@ namespace BLL.Controllers
             if (p == null) return NotFound();
             return View(p);
         }
+
         [HttpPost]
         [AutoValidateAntiforgeryToken]
         public IActionResult Delete(Guid id)
