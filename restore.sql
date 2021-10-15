@@ -31,11 +31,11 @@ CREATE TABLE `addresses` (
   `city` varchar(30) DEFAULT NULL,
   `street` varchar(45) DEFAULT NULL,
   `housenumber` int DEFAULT NULL,
-  `patient_id` varchar(36) DEFAULT NULL,
+  `patientid` varchar(36) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
-  KEY `patient_id` (`patient_id`),
-  CONSTRAINT `addresses_ibfk_1` FOREIGN KEY (`patient_id`) REFERENCES `patients` (`id`)
+  KEY `patientid` (`patientid`),
+  CONSTRAINT `addresses_ibfk_1` FOREIGN KEY (`patientid`) REFERENCES `patients` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
